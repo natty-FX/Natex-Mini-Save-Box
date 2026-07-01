@@ -1,0 +1,3602 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+💰 Natex Mini Save Box V2.1 Stable
+</title>
+
+
+<style>
+
+*{
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+
+/* ===== THEME VARIABLES ===== */
+
+:root{
+    --outsideColor:#e8f5e9;
+    --insideColor:#ffffff;
+    --insideTextColor:#000000;
+    --mainGreen:#0a7c32;
+    --shadow:rgba(0,0,0,0.25);
+}
+
+
+/* ===== BODY ===== */
+
+body{
+    margin:0;
+    padding:15px;
+    background:var(--outsideColor);
+    min-height:100vh;
+    transition:0.4s;
+}
+
+
+/* ===== TOP BAR ===== */
+
+.topBar{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+}
+
+
+h1{
+    margin:0;
+    color:var(--mainGreen);
+    font-size:26px;
+}
+
+
+#greeting{
+    margin-top:8px;
+    font-size:25px;
+    font-weight:bold;
+}
+
+
+/* ===== SETTINGS BUTTON ===== */
+
+.settingBtn{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    border:none;
+    background:#222;
+    color:white;
+    font-size:24px;
+    cursor:pointer;
+}
+
+
+.settingBtn:active{
+    transform:scale(0.95);
+}
+
+
+/* ===== CARDS ===== */
+
+.card{
+    background:var(--insideColor);
+    color:var(--insideTextColor);
+    border-radius:18px;
+    padding:15px;
+    margin-top:15px;
+    box-shadow:0 5px 12px var(--shadow);
+    transition:0.3s;
+}
+
+
+/* ===== BALANCE ===== */
+
+.balance{
+    display:flex;
+    gap:10px;
+}
+
+
+.box{
+    flex:1;
+    background:var(--mainGreen);
+    color:white;
+    border-radius:12px;
+    text-align:center;
+    padding:10px;
+}
+
+
+.box h3{
+    margin:5px;
+    font-size:14px;
+}
+
+
+.box p{
+    margin:5px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+
+/* ===== INPUTS ===== */
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    border-radius:10px;
+    border:1px solid #999;
+    font-size:15px;
+}
+
+
+textarea{
+    resize:none;
+    height:70px;
+}
+
+
+/* ===== BUTTONS ===== */
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    border:none;
+    border-radius:10px;
+    color:white;
+    font-size:15px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+
+button:active{
+    transform:scale(0.95);
+}
+
+
+.add{
+    background:#0a7c32;
+}
+
+
+.withdraw{
+    background:#c62828;
+}
+
+
+.submit{
+    background:#1565c0;
+}
+
+
+.undo{
+    background:#ff9800;
+}
+
+
+.reset{
+    background:#000;
+}
+
+
+.setting{
+    background:#6a1b9a;
+}
+
+
+/* ===== POPUPS ===== */
+
+.popup{
+    display:none;
+    margin-top:10px;
+    background:#eeeeee;
+    padding:10px;
+    border-radius:12px;
+}
+
+
+/* ===== GOAL BAR ===== */
+
+.goalBar{
+    width:100%;
+    height:22px;
+    background:#ddd;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+
+.goalProgress{
+    width:0%;
+    height:100%;
+    background:#0a7c32;
+    transition:0.5s;
+}
+
+
+/* ===== SUCCESS CELEBRATION ===== */
+
+@keyframes celebrate{
+
+    0%{
+        transform:scale(1);
+    }
+
+    25%{
+        transform:scale(1.08);
+    }
+
+    50%{
+        transform:scale(0.95);
+    }
+
+    75%{
+        transform:scale(1.08);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+
+}
+
+
+.celebrate{
+    animation:celebrate 0.8s;
+}
+
+
+/* ===== HISTORY STATUS ===== */
+
+.saved{
+    border-left:7px solid green;
+}
+
+
+.partial{
+    border-left:7px solid orange;
+}
+
+
+.withdrawn{
+    border-left:7px solid red;
+}
+
+
+.retry{
+    border-left:7px solid #777;
+}
+
+
+.green{
+    color:green;
+    font-weight:bold;
+}
+
+
+.orange{
+    color:orange;
+    font-weight:bold;
+}
+
+
+.red{
+    color:red;
+    font-weight:bold;
+}
+
+
+.noteBox{
+    background:#f5f5f5;
+    color:#222;
+    padding:8px;
+    border-radius:8px;
+    margin-top:8px;
+}
+
+
+/* ===== SETTINGS PAGE ===== */
+
+#settingsPage{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    overflow:auto;
+    z-index:1000;
+    background:var(--outsideColor);
+    padding:15px;
+}
+
+
+/* ===== PIN PAGE ===== */
+
+#pinPage{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.8);
+    z-index:2000;
+    padding:20px;
+}
+
+
+#pinBox{
+    margin-top:60px;
+}
+
+
+#pinDots{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin:20px;
+}
+
+
+.dot{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:white;
+    border:2px solid black;
+}
+
+
+.dot.fill{
+    background:black;
+}
+
+
+.keypad{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+
+.keypad button{
+    height:60px;
+    font-size:25px;
+}
+
+
+/* ===== ACCOMPLISHED GOALS ===== */
+
+#accomplishedGoals{
+    background:#f5f5f5;
+    color:#222;
+    padding:10px;
+    border-radius:10px;
+}
+
+
+/* ===== MOBILE ===== */
+
+@media(max-width:400px){
+
+    h1{
+        font-size:22px;
+    }
+
+
+    #greeting{
+        font-size:20px;
+    }
+
+
+    .balance{
+        flex-direction:column;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =============================
+     TOP BAR
+============================== -->
+
+<div class="topBar">
+
+
+<div>
+
+<h1>
+💰 Natex Mini Save Box V2.1
+</h1>
+
+
+<!-- Appears only when profile is set -->
+
+<p id="greeting"></p>
+
+
+</div>
+
+
+<!-- Settings Button -->
+
+<button 
+class="settingBtn"
+onclick="openSettings()">
+
+🛠️
+
+</button>
+
+
+</div>
+
+
+
+<!-- =============================
+     SAVING GOAL DISPLAY
+============================== -->
+
+<div 
+class="card"
+id="goalDisplay"
+style="display:none;">
+
+
+<h2>
+🎯 Current Saving Goal
+</h2>
+
+
+<h3 id="goalName">
+</h3>
+
+
+<p>
+
+₦<span id="goalCurrent">
+0
+</span>
+
+/
+
+₦<span id="goalTarget">
+0
+</span>
+
+</p>
+
+
+<div class="goalBar">
+
+
+<div 
+class="goalProgress"
+id="goalProgress">
+
+</div>
+
+
+</div>
+
+
+<p id="goalPercent">
+
+0%
+
+</p>
+
+
+</div>
+
+
+
+<!-- =============================
+     BALANCE SECTION
+============================== -->
+
+
+<div class="card">
+
+
+<div class="balance">
+
+
+<!-- General Balance -->
+
+<div class="box">
+
+
+<h3>
+🏦 General
+</h3>
+
+
+<p id="general">
+
+₦0
+
+</p>
+
+
+</div>
+
+
+
+<!-- Current Balance -->
+
+<div class="box">
+
+
+<h3>
+💰 Current
+</h3>
+
+
+<p id="current">
+
+₦0
+
+</p>
+
+
+</div>
+
+
+
+<!-- Submitted Balance -->
+
+<div class="box">
+
+
+<h3>
+📤 Submitted
+</h3>
+
+
+<p id="submitted">
+
+₦0
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+<!-- =============================
+     ADD DAILY SAVING
+============================== -->
+
+<div class="card">
+
+<h2>
+💵 Add Daily Saving
+</h2>
+
+<input 
+type="number"
+id="saveAmount"
+placeholder="Enter amount">
+
+<textarea
+id="saveNote"
+placeholder="Write a note for today's saving">
+</textarea>
+
+
+<button 
+class="add"
+onclick="addSaving()">
+
+➕ Add Saving
+
+</button>
+
+</div>
+
+
+
+<!-- =============================
+     WITHDRAW MONEY
+============================== -->
+
+<div class="card">
+
+<h2>
+💸 Withdraw Money
+</h2>
+
+<input
+type="number"
+id="withdrawAmount"
+placeholder="Enter amount">
+
+
+<button 
+class="withdraw"
+onclick="openWithdrawOptions()">
+
+Withdraw
+
+</button>
+
+
+<!-- Withdrawal Options -->
+
+<div 
+id="withdrawOptions"
+class="popup">
+
+<h3>
+Choose Wallet
+</h3>
+
+
+<button 
+class="add"
+onclick="withdrawMoney('current')">
+
+💰 Current Savings
+
+</button>
+
+
+<button 
+class="submit"
+onclick="withdrawMoney('submitted')">
+
+📤 Submitted Savings
+
+</button>
+
+
+<button 
+class="reset"
+onclick="closeWithdrawOptions()">
+
+❌ Cancel
+
+</button>
+
+
+</div>
+
+</div>
+
+
+
+<!-- =============================
+     SUBMIT SAVINGS
+============================== -->
+
+<div class="card">
+
+<h2>
+📤 Submit Savings
+</h2>
+
+
+<input 
+type="number"
+id="submitAmount"
+placeholder="Amount to submit">
+
+
+<button
+class="submit"
+onclick="submitSavings()">
+
+Submit Money
+
+</button>
+
+</div>
+
+
+
+<!-- =============================
+     CONTROL BUTTONS
+============================== -->
+
+<div class="card">
+
+
+<button 
+class="undo"
+onclick="undoAction()">
+
+↩ Undo
+
+</button>
+
+
+<button 
+class="reset"
+onclick="resetEverything()">
+
+🗑 Reset Everything
+
+</button>
+
+
+</div>
+
+
+
+<!-- =============================
+     SAVINGS HISTORY
+============================== -->
+
+<div class="card">
+
+
+<h2>
+📅 Savings History
+</h2>
+
+
+<div id="historyArea">
+
+</div>
+
+
+<button 
+class="submit"
+id="historyButton"
+onclick="toggleHistory()">
+
+📂 See More
+
+</button>
+
+
+</div>
+
+
+
+<!-- =============================
+     SETTINGS FULL PAGE
+============================== -->
+
+<div id="settingsPage">
+
+
+<div class="card">
+
+
+<button 
+class="undo"
+onclick="closeSettings()">
+
+⬅ Back
+
+</button>
+
+
+<h2>
+🛠️ Settings
+</h2>
+
+
+<!-- PROFILE -->
+
+<h3>
+👤 Profile
+</h3>
+
+
+<input
+type="text"
+id="profileInput"
+placeholder="Enter your name">
+
+
+<button 
+class="add"
+onclick="saveProfile()">
+
+Save Profile
+
+</button>
+
+
+<button 
+class="reset"
+onclick="removeProfile()">
+
+Remove Profile
+
+</button>
+
+
+
+<!-- PIN -->
+
+<h3>
+🔐 Transaction PIN
+</h3>
+
+
+<input
+type="password"
+inputmode="numeric"
+maxlength="4"
+id="pinInput"
+placeholder="Create 4-digit PIN">
+
+
+<button
+class="add"
+onclick="savePin()">
+
+Save PIN
+
+</button>
+
+
+<button
+class="reset"
+onclick="removePin()">
+
+Remove PIN
+
+</button>
+
+
+
+<!-- THEMES -->
+
+<h3>
+🎨 Outside Theme
+</h3>
+
+<input 
+type="color"
+id="outsideTheme">
+
+
+<h3>
+🎨 Inside Theme
+</h3>
+
+
+<small>
+Background
+</small>
+
+<input
+type="color"
+id="insideTheme">
+
+
+<small>
+Text
+</small>
+
+<input
+type="color"
+id="textTheme">
+
+
+<button
+class="setting"
+onclick="saveTheme()">
+
+Apply Theme
+
+</button>
+
+
+
+<!-- SOUND SETTINGS -->
+
+<h3>
+🔊 Sounds & Animations
+</h3>
+
+
+<select id="effectSetting">
+
+<option value="on">
+ON
+</option>
+
+
+<option value="off">
+OFF
+</option>
+
+</select>
+
+
+<button 
+class="setting"
+onclick="saveEffects()">
+
+Save Effects
+
+</button>
+
+
+
+<!-- SAVING GOALS -->
+
+<h3>
+🎯 Saving Goal
+</h3>
+
+
+<input
+type="text"
+id="goalInput"
+placeholder="Goal name">
+
+
+<input
+type="number"
+id="goalAmount"
+placeholder="Target amount">
+
+
+<h4>
+Track Money From
+</h4>
+
+
+<select id="goalWallet">
+
+<option value="current">
+💰 Current Savings
+</option>
+
+
+<option value="submitted">
+📤 Submitted Savings
+</option>
+
+
+<option value="general">
+🏦 General Savings
+</option>
+
+</select>
+
+
+<button 
+class="submit"
+onclick="saveGoal()">
+
+Save Goal
+
+</button>
+
+
+<button 
+class="reset"
+onclick="removeGoal()">
+
+Remove Goal
+
+</button>
+
+
+<!-- Accomplished Goals -->
+
+<h3>
+🏆 Accomplished Goals
+</h3>
+
+
+<div id="accomplishedGoals">
+
+No goals achieved yet
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<!-- =============================
+     PIN SCREEN
+============================== -->
+
+
+<div id="pinPage">
+
+
+<div class="card" id="pinBox">
+
+
+<h2>
+🔐 Enter PIN
+</h2>
+
+
+<div id="pinDots">
+
+<div class="dot"></div>
+<div class="dot"></div>
+<div class="dot"></div>
+<div class="dot"></div>
+
+</div>
+
+
+<div class="keypad">
+
+
+<button onclick="pressPin(1)">1</button>
+<button onclick="pressPin(2)">2</button>
+<button onclick="pressPin(3)">3</button>
+
+
+<button onclick="pressPin(4)">4</button>
+<button onclick="pressPin(5)">5</button>
+<button onclick="pressPin(6)">6</button>
+
+
+<button onclick="pressPin(7)">7</button>
+<button onclick="pressPin(8)">8</button>
+<button onclick="pressPin(9)">9</button>
+
+
+<button onclick="cancelPin()">
+❌
+</button>
+
+
+<button onclick="pressPin(0)">
+0
+</button>
+
+
+<button onclick="deletePin()">
+⌫
+</button>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+<script>
+
+// ==============================
+// NATEX MINI SAVE BOX V2.1
+// DATA STORAGE
+// ==============================
+
+let data = JSON.parse(
+localStorage.getItem("natexV21")
+) || {
+
+    // Daily savings records
+    days: [],
+
+    // Start date
+    startDate: "2026-08-01",
+
+    // Wallets
+    submitted: 0,
+
+    // Profile
+    profile: "",
+
+    // Security
+    pin: "",
+
+
+    // Theme system
+    outsideTheme: "#e8f5e9",
+    insideTheme: "#ffffff",
+    textTheme: "#000000",
+
+
+    // Effects
+    effects: "on",
+
+
+    // Saving goal
+    goal: {
+
+        name: "",
+
+        amount: 0,
+
+        wallet: "current",
+
+        achieved: false
+
+    },
+
+
+    // Finished goals
+    accomplishedGoals: [],
+
+
+    // Undo history
+    history: []
+
+};
+
+
+// ==============================
+// TEMP VARIABLES
+// ==============================
+
+
+let showAll = false;
+
+
+// PIN entered numbers
+let enteredPin = "";
+
+
+// Function waiting for PIN
+let pinAction = null;
+
+
+// To prevent goal celebration repeating
+let goalCelebrated = false;
+
+
+// ==============================
+// SAVE EVERYTHING
+// ==============================
+
+
+function store(){
+
+    localStorage.setItem(
+        "natexV21",
+        JSON.stringify(data)
+    );
+
+}
+
+
+// ==============================
+// SAVE UNDO HISTORY
+// ==============================
+
+
+function saveHistory(){
+
+    let backup =
+    JSON.parse(
+        JSON.stringify(data)
+    );
+
+
+    // Do not store old histories
+    backup.history = [];
+
+
+    data.history.push(backup);
+
+
+    // Keep latest 50 actions
+    if(data.history.length > 50){
+
+        data.history.shift();
+
+    }
+
+
+    store();
+
+}
+
+
+// ==============================
+// DATE ENGINE
+// ==============================
+
+
+// Get today's date
+
+function todayDate(){
+
+    return new Date()
+    .toISOString()
+    .split("T")[0];
+
+}
+
+
+// Find a day
+
+function findDay(date){
+
+    return data.days.find(
+        day => day.date === date
+    );
+
+}
+
+
+// Create a new day
+
+function createDay(date){
+
+    let day = {
+
+        date: date,
+
+
+        // Money ever added on that date
+        totalSaved: 0,
+
+
+        // Money still available
+        currentAmount: 0,
+
+
+        // Money removed from that date
+        withdrawnAmount: 0,
+
+
+        // User note
+        note: "",
+
+
+        // saved / partial / withdrawn / retry
+        status: "retry"
+
+    };
+
+
+    data.days.push(day);
+
+
+    return day;
+
+}
+
+
+// Get existing day or create
+
+function getDay(date){
+
+    return findDay(date)
+    || createDay(date);
+
+}
+
+
+// Create automatic dates
+// from 1st August 2026 till today
+
+
+function updateDates(){
+
+
+    let start =
+    new Date(data.startDate);
+
+
+    let today =
+    new Date();
+
+
+    start.setHours(0,0,0,0);
+
+    today.setHours(0,0,0,0);
+
+
+
+    while(start <= today){
+
+
+        let date =
+        start.toISOString()
+        .split("T")[0];
+
+
+        getDay(date);
+
+
+        start.setDate(
+            start.getDate() + 1
+        );
+
+    }
+
+
+    store();
+
+}
+
+
+// ==============================
+// BALANCE ENGINE
+// ==============================
+
+
+// Current available money
+
+function calculateCurrent(){
+
+    let total = 0;
+
+
+    data.days.forEach(day => {
+
+        total += day.currentAmount;
+
+    });
+
+
+    return total;
+
+}
+
+
+// General = Current + Submitted
+
+function calculateGeneral(){
+
+    return calculateCurrent()
+    + data.submitted;
+
+}
+
+
+// Update balance boxes
+
+
+function updateBalances(){
+
+
+    document.getElementById("current")
+    .innerHTML =
+    "₦" + calculateCurrent();
+
+
+    document.getElementById("submitted")
+    .innerHTML =
+    "₦" + data.submitted;
+
+
+    document.getElementById("general")
+    .innerHTML =
+    "₦" + calculateGeneral();
+
+}
+
+
+// ==============================
+// SETTINGS PAGE CONTROL
+// ==============================
+
+
+function openSettings(){
+
+document.getElementById(
+"settingsPage"
+).style.display = "block";
+
+}
+
+
+
+function closeSettings(){
+
+document.getElementById(
+"settingsPage"
+).style.display = "none";
+
+}
+
+// ==============================
+// PROFILE SYSTEM
+// ==============================
+
+function showGreeting(){
+
+let greet =
+document.getElementById("greeting");
+
+
+if(data.profile !== ""){
+
+greet.innerHTML =
+"👋 Hello " + data.profile;
+
+}
+
+else{
+
+greet.innerHTML = "";
+
+}
+
+}
+
+
+function saveProfile(){
+
+let name =
+document.getElementById(
+"profileInput"
+).value.trim();
+
+
+if(name === ""){
+
+alert("Enter a valid name");
+
+return;
+
+}
+
+
+saveHistory();
+
+
+data.profile = name;
+
+
+store();
+
+
+showGreeting();
+
+
+alert("Profile saved");
+
+}
+
+
+
+// Remove profile uses PIN
+// The actual PIN check comes in Part 6
+
+function removeProfile(){
+
+protectAction(function(){
+
+saveHistory();
+
+
+data.profile = "";
+
+
+store();
+
+
+showGreeting();
+
+
+alert("Profile removed");
+
+});
+
+}
+
+
+
+// ==============================
+// THEME SYSTEM
+// ==============================
+
+
+function applyTheme(){
+
+
+document.documentElement
+.style.setProperty(
+"--outsideColor",
+data.outsideTheme
+);
+
+
+document.documentElement
+.style.setProperty(
+"--insideColor",
+data.insideTheme
+);
+
+
+document.documentElement
+.style.setProperty(
+"--insideTextColor",
+data.textTheme
+);
+
+
+}
+
+
+
+function saveTheme(){
+
+
+saveHistory();
+
+
+data.outsideTheme =
+document.getElementById(
+"outsideTheme"
+).value;
+
+
+data.insideTheme =
+document.getElementById(
+"insideTheme"
+).value;
+
+
+data.textTheme =
+document.getElementById(
+"textTheme"
+).value;
+
+
+// Apply immediately
+applyTheme();
+
+
+store();
+
+
+alert(
+"Theme updated successfully"
+);
+
+
+}
+
+
+
+// ==============================
+// EFFECT SETTINGS
+// ==============================
+
+
+function saveEffects(){
+
+
+saveHistory();
+
+
+data.effects =
+document.getElementById(
+"effectSetting"
+).value;
+
+
+store();
+
+
+alert(
+"Effects settings saved"
+);
+
+
+}
+
+
+
+// ==============================
+// SUCCESS SOUND
+// Pip Pip Pip
+// ==============================
+
+
+function playSuccessSound(){
+
+
+if(data.effects !== "on"){
+
+return;
+
+}
+
+
+let audio =
+new (
+window.AudioContext ||
+window.webkitAudioContext
+)();
+
+
+function pip(time){
+
+
+let oscillator =
+audio.createOscillator();
+
+
+let gain =
+audio.createGain();
+
+
+oscillator.connect(gain);
+
+gain.connect(audio.destination);
+
+
+oscillator.frequency.value = 900;
+
+oscillator.type = "sine";
+
+
+gain.gain.value = 0.2;
+
+
+oscillator.start(
+audio.currentTime + time
+);
+
+
+oscillator.stop(
+audio.currentTime + time + 0.1
+);
+
+
+}
+
+
+// Pip Pip Pip
+
+pip(0);
+
+pip(0.2);
+
+pip(0.4);
+
+
+setTimeout(function(){
+
+audio.close();
+
+},800);
+
+
+}
+
+
+
+// ==============================
+// ERROR SOUND
+// Wrong PIN Buzz
+// ==============================
+
+
+function playErrorSound(){
+
+
+if(data.effects !== "on"){
+
+return;
+
+}
+
+
+let audio =
+new (
+window.AudioContext ||
+window.webkitAudioContext
+)();
+
+
+function buzz(time){
+
+
+let oscillator =
+audio.createOscillator();
+
+
+let gain =
+audio.createGain();
+
+
+oscillator.connect(gain);
+
+gain.connect(audio.destination);
+
+
+oscillator.type = "square";
+
+
+oscillator.frequency.value = 150;
+
+
+gain.gain.value = 0.25;
+
+
+oscillator.start(
+audio.currentTime + time
+);
+
+
+oscillator.stop(
+audio.currentTime + time + 0.15
+);
+
+
+}
+
+
+// Buzz Buzz
+
+buzz(0);
+
+buzz(0.18);
+
+
+setTimeout(function(){
+
+audio.close();
+
+},600);
+
+
+}
+
+
+
+// ==============================
+// CELEBRATION ANIMATION
+// For completed goals
+// ==============================
+
+
+function playGoalCelebration(){
+
+
+if(goalCelebrated){
+
+return;
+
+}
+
+
+goalCelebrated = true;
+
+
+// Animation
+
+document.body.classList.add(
+"celebrate"
+);
+
+
+setTimeout(function(){
+
+document.body.classList.remove(
+"celebrate"
+);
+
+},1000);
+
+
+// Celebration sound
+
+if(data.effects === "on"){
+
+
+let audio =
+new (
+window.AudioContext ||
+window.webkitAudioContext
+)();
+
+
+for(let i = 0; i < 6; i++){
+
+
+let osc =
+audio.createOscillator();
+
+
+let gain =
+audio.createGain();
+
+
+osc.connect(gain);
+
+gain.connect(audio.destination);
+
+
+osc.frequency.value =
+500 + (i * 150);
+
+
+gain.gain.value =
+0.15;
+
+
+osc.start(
+audio.currentTime + (i * 0.1)
+);
+
+
+osc.stop(
+audio.currentTime + (i * 0.1) + 0.12
+);
+
+
+}
+
+
+setTimeout(function(){
+
+audio.close();
+
+},1000);
+
+
+}
+
+
+}
+
+
+// Allow celebration again
+// after a new goal is created
+
+function resetGoalCelebration(){
+
+goalCelebrated = false;
+
+}
+
+// ==============================
+// PIN CREATION
+// ==============================
+
+function savePin(){
+
+let pin =
+document.getElementById(
+"pinInput"
+).value;
+
+
+if(!/^[0-9]{4}$/.test(pin)){
+
+alert(
+"PIN must be exactly 4 digits"
+);
+
+return;
+
+}
+
+
+saveHistory();
+
+
+data.pin = pin;
+
+
+store();
+
+
+document.getElementById(
+"pinInput"
+).value = "";
+
+
+alert(
+"PIN saved successfully"
+);
+
+}
+
+
+
+// ==============================
+// MAIN PIN PROTECTION
+// ==============================
+
+function protectAction(action){
+
+
+// No PIN created
+
+if(data.pin === ""){
+
+action();
+
+return;
+
+}
+
+
+// Prepare keypad
+
+enteredPin = "";
+
+pinAction = action;
+
+
+updatePinDots();
+
+
+document.getElementById(
+"pinPage"
+).style.display = "block";
+
+
+}
+
+
+
+// ==============================
+// NUMBER BUTTONS
+// ==============================
+
+function pressPin(number){
+
+
+if(enteredPin.length >= 4){
+
+return;
+
+}
+
+
+enteredPin += number;
+
+
+updatePinDots();
+
+
+// Automatically check after 4 digits
+
+if(enteredPin.length === 4){
+
+
+if(enteredPin === data.pin){
+
+
+// Close PIN screen
+
+document.getElementById(
+"pinPage"
+).style.display = "none";
+
+
+// Save requested action
+
+let action = pinAction;
+
+
+// Reset
+
+enteredPin = "";
+
+pinAction = null;
+
+
+updatePinDots();
+
+
+// Continue operation
+
+action();
+
+
+}
+
+
+else{
+
+
+playErrorSound();
+
+
+alert(
+"Incorrect PIN"
+);
+
+
+enteredPin = "";
+
+
+updatePinDots();
+
+
+}
+
+
+}
+
+
+}
+
+
+
+// ==============================
+// DELETE LAST NUMBER
+// ==============================
+
+function deletePin(){
+
+
+enteredPin =
+enteredPin.slice(0,-1);
+
+
+updatePinDots();
+
+
+}
+
+
+
+// ==============================
+// CANCEL PIN ENTRY
+// ==============================
+
+function cancelPin(){
+
+
+enteredPin = "";
+
+
+pinAction = null;
+
+
+updatePinDots();
+
+
+document.getElementById(
+"pinPage"
+).style.display = "none";
+
+
+}
+
+
+
+// ==============================
+// UPDATE PIN DOTS
+// ==============================
+
+function updatePinDots(){
+
+
+let dots =
+document.querySelectorAll(
+"#pinDots .dot"
+);
+
+
+dots.forEach(function(dot,index){
+
+
+if(index < enteredPin.length){
+
+
+dot.classList.add("fill");
+
+
+}
+
+
+else{
+
+
+dot.classList.remove("fill");
+
+
+}
+
+
+});
+
+
+}
+
+
+
+// ==============================
+// REMOVE PROFILE
+// Requires PIN
+// ==============================
+
+function removeProfile(){
+
+
+protectAction(function(){
+
+
+saveHistory();
+
+
+data.profile = "";
+
+
+store();
+
+
+showGreeting();
+
+
+alert(
+"Profile removed"
+);
+
+
+});
+
+
+}
+
+
+
+// ==============================
+// REMOVE PIN
+// Requires current PIN
+// ==============================
+
+function removePin(){
+
+
+if(data.pin === ""){
+
+
+alert(
+"No PIN has been created"
+);
+
+
+return;
+
+
+}
+
+
+protectAction(function(){
+
+
+saveHistory();
+
+
+data.pin = "";
+
+
+store();
+
+
+alert(
+"PIN removed successfully"
+);
+
+
+});
+
+
+}
+
+
+// ==============================
+// ADD DAILY SAVING
+// ==============================
+
+function addSaving(){
+
+protectAction(function(){
+
+let amount = Number(
+document.getElementById("saveAmount").value
+);
+
+let note = document
+.getElementById("saveNote")
+.value.trim();
+
+
+if(amount <= 0){
+
+alert("Enter a valid amount");
+
+return;
+
+}
+
+
+saveHistory();
+
+
+// Get today's automatic date
+
+let day = getDay(todayDate());
+
+
+// Add money
+
+day.totalSaved += amount;
+
+day.currentAmount += amount;
+
+
+// Save note
+
+if(note !== ""){
+
+day.note = note;
+
+}
+
+
+// Update status
+
+day.status = "saved";
+
+
+// Clear inputs
+
+document.getElementById(
+"saveAmount"
+).value = "";
+
+document.getElementById(
+"saveNote"
+).value = "";
+
+
+store();
+
+updateBalances();
+
+updateGoal();
+
+drawHistory();
+
+playSuccessSound();
+
+
+alert(
+"Saving added successfully"
+);
+
+
+});
+
+}
+
+
+
+// ==============================
+// SUBMIT MONEY
+// ==============================
+
+function submitSavings(){
+
+protectAction(function(){
+
+
+let amount = Number(
+document.getElementById("submitAmount")
+.value
+);
+
+
+if(amount <= 0){
+
+alert("Enter a valid amount");
+
+return;
+
+}
+
+
+if(amount > calculateCurrent()){
+
+alert(
+"Not enough current savings"
+);
+
+return;
+
+}
+
+
+saveHistory();
+
+
+let remaining = amount;
+
+
+// Remove from oldest savings
+
+for(let day of data.days){
+
+
+if(remaining <= 0){
+break;
+}
+
+
+if(day.currentAmount >= remaining){
+
+
+day.currentAmount -= remaining;
+
+
+
+
+
+remaining = 0;
+
+
+}
+
+
+else{
+
+
+remaining -= day.currentAmount;
+
+
+
+
+day.currentAmount = 0;
+
+
+}
+
+
+updateDayStatus(day);
+
+
+}
+
+
+// Add to submitted wallet
+
+data.submitted += amount;
+
+
+// Clear box
+
+document.getElementById(
+"submitAmount"
+).value = "";
+
+
+// Update app
+
+store();
+
+updateBalances();
+
+drawHistory();
+
+updateGoal();
+
+
+playSuccessSound();
+
+
+alert(
+"Money submitted successfully"
+);
+
+
+});
+
+}
+
+
+
+// ==============================
+// OPEN WITHDRAW OPTIONS
+// ==============================
+
+function openWithdrawOptions(){
+
+
+let amount = Number(
+document.getElementById("withdrawAmount")
+.value
+);
+
+
+if(amount <= 0){
+
+alert(
+"Enter a valid amount"
+);
+
+return;
+
+}
+
+
+document.getElementById(
+"withdrawOptions"
+).style.display = "block";
+
+
+}
+
+
+
+// ==============================
+// CLOSE WITHDRAW OPTIONS
+// ==============================
+
+function closeWithdrawOptions(){
+
+document.getElementById(
+"withdrawOptions"
+).style.display = "none";
+
+}
+
+
+
+// ==============================
+// WITHDRAW MONEY
+// ==============================
+
+function withdrawMoney(wallet){
+
+protectAction(function(){
+
+
+let amount = Number(
+document.getElementById("withdrawAmount")
+.value
+);
+
+
+if(wallet === "current"){
+
+
+if(amount > calculateCurrent()){
+
+alert(
+"Not enough current balance"
+);
+
+return;
+
+}
+
+
+saveHistory();
+
+
+let remaining = amount;
+
+
+// Withdraw from oldest days
+
+for(let day of data.days){
+
+
+if(remaining <= 0){
+break;
+}
+
+
+if(day.currentAmount >= remaining){
+
+
+day.currentAmount -= remaining;
+
+
+day.withdrawnAmount += remaining;
+
+
+remaining = 0;
+
+
+}
+
+
+else{
+
+
+remaining -= day.currentAmount;
+
+
+day.withdrawnAmount += 
+day.currentAmount;
+
+
+day.currentAmount = 0;
+
+
+}
+
+
+updateDayStatus(day);
+
+
+}
+
+
+alert(
+"Current savings withdrawn"
+);
+
+
+}
+
+
+// Withdraw from submitted
+
+else{
+
+
+if(amount > data.submitted){
+
+alert(
+"Not enough submitted balance"
+);
+
+return;
+
+}
+
+
+saveHistory();
+
+
+data.submitted -= amount;
+
+
+alert(
+"Submitted savings withdrawn"
+);
+
+
+}
+
+
+// Clear input
+
+document.getElementById(
+"withdrawAmount"
+).value = "";
+
+
+closeWithdrawOptions();
+
+
+// Refresh
+
+store();
+
+updateBalances();
+
+drawHistory();
+
+updateGoal();
+
+
+playSuccessSound();
+
+
+});
+
+
+}
+
+
+
+// ==============================
+// UPDATE DAILY STATUS
+// ==============================
+
+function updateDayStatus(day){
+
+
+if(day.totalSaved === 0){
+
+
+day.status = "retry";
+
+
+}
+
+
+// All money still available
+
+else if(
+day.currentAmount === 
+day.totalSaved
+){
+
+
+day.status = "saved";
+
+
+}
+
+
+// Some money removed
+
+else if(day.currentAmount > 0){
+
+if(day.withdrawnAmount > 0){
+    day.status = "partial";
+}
+else{
+    day.status = "saved";
+}
+
+}
+
+// Everything removed
+
+else{
+
+
+day.status = "withdrawn";
+
+
+}
+
+
+}
+
+// ==============================
+// SAVE NEW GOAL
+// ==============================
+
+function saveGoal(){
+
+let name = document
+.getElementById("goalInput")
+.value.trim();
+
+let amount = Number(
+document.getElementById("goalAmount")
+.value
+);
+
+let wallet = document
+.getElementById("goalWallet")
+.value;
+
+
+if(name === "" || amount <= 0){
+
+alert("Enter a valid goal");
+
+return;
+
+}
+
+
+saveHistory();
+
+
+data.goal = {
+
+name: name,
+
+amount: amount,
+
+wallet: wallet,
+
+achieved: false
+
+};
+
+
+// Allow new celebration
+
+goalCelebrated = false;
+
+
+store();
+
+updateGoal();
+
+
+alert("Goal saved successfully");
+
+}
+
+
+
+// ==============================
+// REMOVE GOAL
+// ==============================
+
+function removeGoal(){
+
+if(data.goal.name === ""){
+
+alert("No active goal");
+
+return;
+
+}
+
+
+saveHistory();
+
+
+data.goal = {
+
+name: "",
+
+amount: 0,
+
+wallet: "current",
+
+achieved: false
+
+};
+
+
+store();
+
+updateGoal();
+
+
+alert("Goal removed");
+
+}
+
+
+
+// ==============================
+// GET MONEY USED FOR GOAL
+// ==============================
+
+function getGoalBalance(){
+
+
+if(data.goal.wallet === "current"){
+
+return calculateCurrent();
+
+}
+
+
+if(data.goal.wallet === "submitted"){
+
+return data.submitted;
+
+}
+
+
+// General
+
+return calculateGeneral();
+
+}
+
+
+
+// ==============================
+// UPDATE GOAL DISPLAY
+// ==============================
+
+function updateGoal(){
+
+let box = document
+.getElementById("goalDisplay");
+
+
+if(data.goal.name === ""){
+
+box.style.display = "none";
+
+showAccomplishedGoals();
+
+return;
+
+}
+
+
+box.style.display = "block";
+
+
+let balance = getGoalBalance();
+
+
+let percent =
+Math.min(
+(balance / data.goal.amount) * 100,
+100
+);
+
+
+// Update display
+
+document.getElementById("goalName")
+.innerHTML = data.goal.name;
+
+
+document.getElementById("goalCurrent")
+.innerHTML = balance;
+
+
+document.getElementById("goalTarget")
+.innerHTML = data.goal.amount;
+
+
+document.getElementById("goalPercent")
+.innerHTML =
+percent.toFixed(0) + "%";
+
+
+document.getElementById("goalProgress")
+.style.width = percent + "%";
+
+
+// Goal reached
+
+if(
+balance >= data.goal.amount &&
+data.goal.achieved === false
+){
+
+completeGoal();
+
+}
+
+
+showAccomplishedGoals();
+
+}
+
+
+
+// ==============================
+// GOAL COMPLETION
+// ==============================
+
+function completeGoal(){
+
+
+data.goal.achieved = true;
+
+
+playGoalCelebration();
+
+
+setTimeout(function(){
+
+
+let choice = confirm(
+
+"🎉 Congratulations! You achieved your goal!\n\n" +
+
+"Press OK to withdraw the goal money.\n" +
+
+"Press Cancel to keep the money."
+
+);
+
+
+// Save accomplishment
+
+data.accomplishedGoals.push({
+
+name: data.goal.name,
+
+amount: data.goal.amount,
+
+date: todayDate(),
+
+choice: choice ?
+"Withdrawn" :
+"Kept"
+
+});
+
+
+
+// If user chooses withdrawal
+
+if(choice){
+
+
+withdrawGoalMoney();
+
+
+}
+
+
+// Remove active goal
+
+data.goal = {
+
+name: "",
+
+amount: 0,
+
+wallet: "current",
+
+achieved: false
+
+};
+
+
+store();
+
+updateGoal();
+
+
+}, 1000);
+
+
+}
+
+
+
+// ==============================
+// WITHDRAW GOAL MONEY
+// ==============================
+
+function withdrawGoalMoney(){
+
+let amount = data.goal.amount;
+
+
+if(data.goal.wallet === "current"){
+
+
+let remaining = amount;
+
+
+for(let day of data.days){
+
+
+if(remaining <= 0){
+break;
+}
+
+
+if(day.currentAmount >= remaining){
+
+
+day.currentAmount -= remaining;
+
+day.withdrawnAmount += remaining;
+
+remaining = 0;
+
+
+}
+
+else{
+
+
+remaining -= day.currentAmount;
+
+day.withdrawnAmount += day.currentAmount;
+
+day.currentAmount = 0;
+
+
+}
+
+
+updateDayStatus(day);
+
+
+}
+
+
+}
+
+
+else if(
+data.goal.wallet === "submitted"
+){
+
+
+data.submitted -= amount;
+
+
+}
+
+
+else{
+
+
+// General wallet removes from current first
+
+let remaining = amount;
+
+
+// Remove current money
+
+for(let day of data.days){
+
+if(remaining <= 0){
+break;
+}
+
+
+if(day.currentAmount >= remaining){
+
+day.currentAmount -= remaining;
+
+day.withdrawnAmount += remaining;
+
+remaining = 0;
+
+}
+
+else{
+
+remaining -= day.currentAmount;
+
+day.withdrawnAmount += day.currentAmount;
+
+day.currentAmount = 0;
+
+}
+
+
+updateDayStatus(day);
+
+}
+
+
+// If still remaining, remove submitted
+
+if(remaining > 0){
+
+data.submitted -= remaining;
+
+}
+
+
+}
+
+
+}
+
+
+
+// ==============================
+// ACCOMPLISHED GOAL LIST
+// ==============================
+
+function showAccomplishedGoals(){
+
+let area = document
+.getElementById("accomplishedGoals");
+
+
+if(
+data.accomplishedGoals.length === 0
+){
+
+area.innerHTML =
+"No goals achieved yet";
+
+return;
+
+}
+
+
+let html = "";
+
+
+data.accomplishedGoals
+.forEach(function(goal){
+
+
+html += `
+<div style="
+margin:8px 0;
+padding:8px;
+border-radius:10px;
+background:#eee;
+">
+
+🏆 <strong>${goal.name}</strong><br>
+
+💰 ₦${goal.amount}<br>
+
+📅 ${goal.date}<br>
+
+📌 ${goal.choice}
+
+</div>
+`;
+
+});
+
+
+area.innerHTML = html;
+
+
+}
+
+// ==============================
+// HISTORY DISPLAY
+// ==============================
+
+function drawHistory(){
+
+let area =
+document.getElementById(
+"historyArea"
+);
+
+
+area.innerHTML = "";
+
+
+// Show latest 5 or all
+
+let list = showAll
+? data.days
+: data.days.slice(-5);
+
+
+list.forEach(function(day){
+
+
+let statusText = "";
+
+
+// Determine status text
+
+if(day.status === "saved"){
+
+statusText =
+`
+<span class="green">
+🟢 Saved
+</span>
+`;
+
+}
+
+
+else if(day.status === "partial"){
+
+statusText =
+`
+<span class="orange">
+🟡 Partially Withdrawn
+</span>
+`;
+
+}
+
+
+else if(day.status === "withdrawn"){
+
+statusText =
+`
+<span class="red">
+🔴 Withdrawn
+</span>
+`;
+
+}
+
+
+else{
+
+statusText =
+`
+<span class="red">
+❌ Retry
+</span>
+`;
+
+}
+
+
+area.innerHTML += `
+
+<div class="card ${day.status}">
+
+
+<h3>
+📅 ${day.date}
+</h3>
+
+
+<p>
+💰 Total Saved:
+<b>
+₦${day.totalSaved}
+</b>
+</p>
+
+
+<p>
+💵 Available:
+<b>
+₦${day.currentAmount}
+</b>
+</p>
+
+
+<p>
+💸 Withdrawn:
+<b>
+₦${day.withdrawnAmount}
+</b>
+</p>
+
+
+<p>
+${statusText}
+</p>
+
+
+<p class="noteBox">
+📝 ${
+day.note === ""
+? "No note"
+: day.note
+}
+</p>
+
+
+</div>
+
+`;
+
+});
+
+
+updateBalances();
+
+store();
+
+}
+
+
+
+// ==============================
+// SEE MORE HISTORY
+// ==============================
+
+function toggleHistory(){
+
+
+showAll = !showAll;
+
+
+let button =
+document.getElementById(
+"historyButton"
+);
+
+
+if(showAll){
+
+button.innerHTML =
+"📁 Show Less";
+
+}
+
+else{
+
+button.innerHTML =
+"📂 See More";
+
+}
+
+
+drawHistory();
+
+}
+
+
+
+// ==============================
+// UNDO SYSTEM
+// ==============================
+
+function undoAction(){
+
+
+protectAction(function(){
+
+
+if(data.history.length === 0){
+
+alert(
+"Nothing to undo"
+);
+
+return;
+
+}
+
+
+// Restore previous data
+
+let previous =
+data.history.pop();
+
+
+data = previous;
+
+
+// Refresh everything
+
+store();
+
+applyTheme();
+
+showGreeting();
+
+updateGoal();
+
+drawHistory();
+
+
+alert(
+"Last action has been undone"
+);
+
+
+});
+
+
+}
+
+
+
+// ==============================
+// RESET EVERYTHING
+// ==============================
+
+function resetEverything(){
+
+
+protectAction(function(){
+
+
+let answer = confirm(
+"⚠️ Delete all savings, settings and history?"
+);
+
+
+if(!answer){
+
+return;
+
+}
+
+
+// Clear storage
+
+localStorage.removeItem(
+"natexV21"
+);
+
+
+// Return to default data
+
+data = {
+
+
+days: [],
+
+
+startDate: "2026-08-01",
+
+
+submitted: 0,
+
+
+profile: "",
+
+
+pin: "",
+
+
+outsideTheme: "#e8f5e9",
+
+
+insideTheme: "#ffffff",
+
+
+textTheme: "#000000",
+
+
+effects: "on",
+
+
+goal: {
+
+name: "",
+
+amount: 0,
+
+wallet: "current",
+
+achieved: false
+
+},
+
+
+accomplishedGoals: [],
+
+
+history: []
+
+
+};
+
+
+// Recreate dates
+
+updateDates();
+
+
+// Reload interface
+
+applyTheme();
+
+showGreeting();
+
+updateGoal();
+
+drawHistory();
+
+
+alert(
+"💰 Natex Mini Save Box has been reset"
+);
+
+
+});
+
+
+}
+
+// ==============================
+// APPLICATION STARTUP
+// ==============================
+
+
+// Create automatic dates
+updateDates();
+
+
+// Load saved theme immediately
+applyTheme();
+
+
+// Show profile greeting
+showGreeting();
+
+
+// Load goal display
+updateGoal();
+
+
+// Load savings history and balances
+drawHistory();
+
+
+// Load settings values into inputs
+
+document.getElementById(
+"outsideTheme"
+).value =
+data.outsideTheme;
+
+
+document.getElementById(
+"insideTheme"
+).value =
+data.insideTheme;
+
+
+document.getElementById(
+"textTheme"
+).value =
+data.textTheme;
+
+
+document.getElementById(
+"effectSetting"
+).value =
+data.effects;
+
+
+if(data.profile !== ""){
+
+document.getElementById(
+"profileInput"
+).value =
+data.profile;
+
+}
+
+
+// Load current goal into settings
+
+if(data.goal.name !== ""){
+
+
+document.getElementById(
+"goalInput"
+).value =
+data.goal.name;
+
+
+document.getElementById(
+"goalAmount"
+).value =
+data.goal.amount;
+
+
+document.getElementById(
+"goalWallet"
+).value =
+data.goal.wallet;
+
+
+}
+
+
+// Show accomplished goals
+
+showAccomplishedGoals();
+
+
+// Final message for developers
+
+console.log(
+"💰 Natex Mini Save Box V2.1 Stable Loaded Successfully"
+);
+
+
+// ==============================
+// END OF JAVASCRIPT
+// ==============================
+
+</script>
+
+
+</body>
+
+</html>
